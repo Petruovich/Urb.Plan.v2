@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Urb.Infrastructure.Urb.Repositories
+namespace Urb.Domain.Urb.IRepositories
 {
-    internal class JWTManagerRepository
+    public interface ITokenManagerRepository
     {
     }
 }

@@ -1,10 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Urb.Domain.Urb.DataConext;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
+
 builder.Services.AddDbContext<UserTokenDataContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddDbContext<MainDataContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddIdentityCore<IdentityUser/*, IdentityRole*/>(options =>
@@ -15,24 +19,46 @@ builder.Services.AddIdentityCore<IdentityUser/*, IdentityRole*/>(options =>
         options.SignIn.RequireConfirmedEmail = true;
         options.User.RequireUniqueEmail = true;
     })
-//builder.Services
+
     .AddEntityFrameworkStores<MainDataContext>()
     .AddEntityFrameworkStores<UserTokenDataContext>();
+builder.Services.AddControllers();
 builder.Services.AddRazorPages();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v2", new OpenApiInfo { Title = "MVCCallWebAPI", Version = "v2" });
+});
+
+
+
+
+
+
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+    // Configure the HTTP request pipeline.
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Error");
+    }
+app.UseSwagger();
+
+// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+// specifying the Swagger JSON endpoint.
+app.UseSwaggerUI(c =>
 {
-    app.UseExceptionHandler("/Error");
-}
+    c.SwaggerEndpoint("/swagger/v2/swagger.json", "MVCCallWebAPI");
+});
 app.UseStaticFiles();
 
-app.UseRouting();
+    app.UseRouting();
 
-app.UseAuthorization();
+    app.UseAuthorization();
 
-app.MapRazorPages();
+    app.MapRazorPages();
 
-app.Run();
+    app.Run();
+
+

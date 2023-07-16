@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Urb.Domain.Urb.IRepositories
 {
-    internal class IUserRepository
+    public interface IUserRepository
     {
+
     }
 }

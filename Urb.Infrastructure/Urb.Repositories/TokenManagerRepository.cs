@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Urb.Domain.Urb.IRepositories
+namespace Urb.Infrastructure.Urb.Repositories
 {
-    internal interface IJWTManagerRepository
+    internal class TokenManagerRepository
     {
     }
 }
