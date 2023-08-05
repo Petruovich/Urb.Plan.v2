@@ -1,4 +1,7 @@
-﻿namespace Urb.Plan.v2
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+
+namespace Urb.Plan.v2
 {
     public class Project_Manhattan
     {
@@ -25,6 +28,51 @@
 
             }
 
+            public class Nrte
+            {
+                public List<int> Erett()
+                {
+                    List<int> list = new List<int> { 1, 2, 3, 4 };
+
+                    list.Sort((x, y) => x.CompareTo(y));
+
+                    return list;
+
+                }
+            }
+
+            //public class Oneq
+            //{
+            //   public int fty { get;  }
+            //    public  int Onew()
+            //    {
+
+            //        var r = 1;
+            //        var e = 2;
+            //        int t = r + e;
+            //        return t;
+            //    }
+            //}
+            //public class Oner
+            //{
+            //    public void Onet(Oneq onert)
+            //    {
+            //        onert.fty = 1;                    
+            //    }
+            //}
+            //public class ERdsj
+            //{
+            //    public string Rvdjs()
+            //    {
+            //        var config = new ConfigurationBuilder()
+            //        .AddJsonFile("appsettings.json") // Укажите путь к файлу appsettings.json
+            //        .Build();
+            //        var appSettings = new AppSettings();
+                    
+            //       return config.GetSection("JWTAuth").Bind(appSettings.JWTAuth);
+                    
+            //    }
+            //}
         }
     }
 }
