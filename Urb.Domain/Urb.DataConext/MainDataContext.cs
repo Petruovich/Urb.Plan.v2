@@ -12,6 +12,7 @@ namespace Urb.Domain.Urb.DataConext
     public class MainDataContext : IdentityDbContext
     
     {
+        
         public MainDataContext(DbContextOptions<MainDataContext> contextOptions)
        : base(contextOptions)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Urb.Domain.Urb.DataConext
 {
     public class UserTokenDataContext: IdentityDbContext
     {
-     public DbSet<User> Users { get; set; }
+     public DbSet<IdentityUser> Users { get; set; }
      public DbSet<Token> Tokens { get; set; }
         protected override void OnModelCreating(ModelBuilder dbModelBuilder)
         {

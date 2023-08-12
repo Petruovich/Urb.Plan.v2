@@ -65,7 +65,7 @@ namespace Urb.Plan.v2
             //    public string Rvdjs()
             //    {
             //        var config = new ConfigurationBuilder()
-            //        .AddJsonFile("appsettings.json") // Укажите путь к файлу appsettings.json
+            //        .AddJsonFile("appsettings.json") 
             //        .Build();
             //        var appSettings = new AppSettings();
                     

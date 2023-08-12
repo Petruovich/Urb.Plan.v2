@@ -35,9 +35,5 @@ namespace Urb.Infrastructure.Urb.Repositories
         {
             _dbContext.Set<User>().Update(user);
         }
-
-
-
-
     }
 }

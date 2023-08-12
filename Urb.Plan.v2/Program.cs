@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Urb.Plan.v2;
+using Microsoft.AspNetCore.Hosting;
+using Urb.Plan.v2.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,15 +31,35 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v2", new OpenApiInfo { Title = "MVCCallWebAPI", Version = "v2" });
 });
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-
-
-
-
-
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Urb.API", Version = "Test" });
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme {
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference {
+                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                    }
+                },
+            new string[] {}
+        }
+    });
+});
+        
 var app = builder.Build();
 
     // Configure the HTTP request pipeline.
