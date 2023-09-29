@@ -10,11 +10,11 @@ namespace Urb.Plan.v2.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserController: ControllerBase
     {
         private IUserService _userService;
         private IMapper _mapper;
-        private readonly AppSettings _appSettings;
+        private readonly AppSettings _appSettings;       
         public UserController(
             IUserService userService,
             IMapper mapper,

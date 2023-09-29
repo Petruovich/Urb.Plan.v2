@@ -6,11 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Urb.IUnitOfWork\" />
-  </ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<None Update="E:\Users\bogac\Desktop\Urb.Plan.v2\Urb.Persistance\Migrations\{0}.Designer.cs">
+			<Generator>MSBuild:UpdateGeneratedFiles</Generator>
+			<LastGenOutput>E:\Users\bogac\Desktop\Urb.Plan.v2\Urb.Persistance\Migrations\{0}.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+
+
+
+
+	<ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
