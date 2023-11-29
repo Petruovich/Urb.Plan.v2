@@ -90,7 +90,7 @@ namespace Urb.Infrastructure.Urb.Services
         }
         public async Task<object> AuthenticateUser(IUserAuthenticateModel authenticateUser)
         {
-            //var auth = _mapper.Map<UserRegisterModel>(authenticateUser);
+            //var auth = _mapper.Map<UserRegisterModel>(authenticateUser);/
             //IUserRegisterModel user = new UserRegisterModel();
             //var huy = _mapper.Map<IUserAuthenticateModel>(user);
             var user = _mapper.Map<User>(authenticateUser);
