@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Urb.Application.Urb.IRepositories
+namespace Urb.Application.App.Settings
 {
-    public interface ITokenManagerRepository
+    public class AppSettings
     {
+        public string JWTKey { get; set; }
     }
 }

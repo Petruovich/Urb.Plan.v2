@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Urb.Domain.Urb.DataConext;
+using Urb.Persistance.Urb.DataConext;
 
 #nullable disable
 
-namespace Urb.Domain.Migrations
+namespace Urb.Persistance.Migrations
 {
     [DbContext(typeof(UserTokenDataContext))]
-    [Migration("20230926004532_Second")]
-    partial class Second
+    partial class UserTokenDataContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,10 +86,6 @@ namespace Urb.Domain.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -144,10 +137,6 @@ namespace Urb.Domain.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -231,30 +220,6 @@ namespace Urb.Domain.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Urb.Domain.Urb.Models.Token", b =>
-                {
-                    b.Property<string>("TokenId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Access_Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TokenId");
-
-                    b.ToTable("Tokens");
-                });
-
-            modelBuilder.Entity("Urb.Domain.Urb.Models.User", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.HasDiscriminator().HasValue("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -304,22 +269,6 @@ namespace Urb.Domain.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Urb.Domain.Urb.Models.Token", b =>
-                {
-                    b.HasOne("Urb.Domain.Urb.Models.User", "User")
-                        .WithMany("Tokens")
-                        .HasForeignKey("TokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Urb.Domain.Urb.Models.User", b =>
-                {
-                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }

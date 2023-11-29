@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Urb.Domain.Urb.DataConext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,24 +6,36 @@ using Microsoft.OpenApi.Models;
 using Urb.Plan.v2;
 using Microsoft.AspNetCore.Hosting;
 using Urb.Plan.v2.Mapper;
+using Urb.Persistance.Urb.DataConext;
+using Urb.Application.Urb.IServices;
+using Urb.Plan.v2.Controllers;
+using Urb.Infrastructure.Urb.Services;
+using Urb.Application.App.Settings;
+using Urb.Application.ComponentModels;
+using Urb.Application.IComponentModels;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
 
-builder.Services.AddDbContext<UserTokenDataContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
+builder.Services.AddDbContext<UserTokenDataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddDbContext<MainDataContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddIdentityCore<IdentityUser/*, IdentityRole*/>(options =>
     {
+        options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.";
         options.Password.RequireUppercase = true;
         options.Password.RequireNonAlphanumeric = true;
-        options.Password.RequiredLength = 8;
-        options.SignIn.RequireConfirmedEmail = true;
+        options.Password.RequiredLength = 6;
+        //options.SignIn.RequireConfirmedEmail = true;
         options.User.RequireUniqueEmail = true;
     })
-
-    .AddEntityFrameworkStores<MainDataContext>()
-    .AddEntityFrameworkStores<UserTokenDataContext>();
+    
+    //.AddEntityFrameworkStores<MainDataContext>()
+    .AddEntityFrameworkStores<UserTokenDataContext>()
+    .AddSignInManager<SignInManager<IdentityUser>>()
+    .AddDefaultTokenProviders();
+//builder.Services.AddSignInManager<IdentityUser, SignInManager<IdentityUser>>();
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen(c =>
@@ -59,7 +70,18 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-        
+
+
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IUserRegisterModel, UserRegisterModel>();
+builder.Services.AddSingleton<ISystemClock, SystemClock>();
+//builder.Services.AddScoped<SignInManager<IdentityUser>>();
+//builder.Services.AddScoped<UserService, IUserRegisterModel>();
+
+
+
 var app = builder.Build();
 
     // Configure the HTTP request pipeline.
@@ -78,10 +100,10 @@ app.UseSwaggerUI(c =>
 app.UseStaticFiles();
 
     app.UseRouting();
-
+    app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapRazorPages();
+    app.MapControllers();
 
     app.Run();
 

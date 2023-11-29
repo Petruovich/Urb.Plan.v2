@@ -13,29 +13,30 @@ namespace Urb.Persistance.Urb.DataConext
 {
     public class UserTokenDataContext : IdentityDbContext
     {
-        public DbSet<IdentityUser> Users { get; set; }
-        public DbSet<Token> Tokens { get; set; }
-        protected override void OnModelCreating(ModelBuilder dbModelBuilder)
-        {
-            dbModelBuilder.Entity<Token>()
-                .HasKey(t => t.TokenId);
+        //public DbSet<User> Users { get; set; }
+        //public DbSet<Token> Tokens { get; set; }
+        //protected override void OnModelCreating(ModelBuilder dbModelBuilder)
+        //{
+        //    dbModelBuilder.Entity<Token>()
+        //        .HasKey(t => t.TokenId);
 
-            dbModelBuilder.Entity<Token>()
-                .HasOne<User>(q => q.User)
-                .WithMany(q => q.Tokens)
-                .HasForeignKey(t => t.TokenId);
+        //    dbModelBuilder.Entity<Token>()
+        //        .HasOne<User>(q => q.User)
+        //        .WithMany(q => q.Tokens)
+        //        .HasForeignKey(t => t.TokenId);
 
-            dbModelBuilder.Entity<User>()
-                .HasMany<Token>(e => e.Tokens)
-            .WithOne(x => x.User);
+        //    dbModelBuilder.Entity<User>()
+        //        .HasMany<Token>(e => e.Tokens)
+        //    .WithOne(x => x.User);
 
-            base.OnModelCreating(dbModelBuilder);
+        //    base.OnModelCreating(dbModelBuilder);
 
-        }
+        //}
         public UserTokenDataContext(DbContextOptions<UserTokenDataContext> contextOptions)
       : base(contextOptions)
         {
         }
+        
     }
 }
 

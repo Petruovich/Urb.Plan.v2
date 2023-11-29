@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Urb.Infrastructure\Urb.Services\UserService.cs" Link="UserService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
@@ -25,7 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\API\Urb.Application.csproj" />
     <ProjectReference Include="..\Urb.Domain\Urb.Domain.csproj" />
+    <ProjectReference Include="..\Urb.Infrastructure\Urb.Infrastructure.csproj" />
+    <ProjectReference Include="..\Urb.Persistance\Urb.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Urb.Plan.v2.IServices;
+﻿using Urb.Application.Urb.IServices;
+
 
 namespace Urb.Plan.v2.Urb.Middlewares
 {
@@ -13,16 +14,16 @@ namespace Urb.Plan.v2.Urb.Middlewares
             _requestDelegate = requestDelegate;
         }
 
-        public RequestDelegate Invoke(IJWTService jWTService, HttpContext httpContext, IUserService userService)
-        {
-            var token = httpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var userId = jWTService.ValidateToken(token);
-            if (userId != null)
-            {
-                httpContext.Items["User"] = _service.GetUser(userId.Value);
-            }
+        //public RequestDelegate Invoke(IJwtService jWTService, HttpContext httpContext, IUserService userService)
+        //{
+        //    var token = httpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        //    var userId = jWTService.ValidateToken(token);
+        //    if (userId != null)
+        //    {
+        //        httpContext.Items["User"] = _service.GetUser(userId.Value);
+        //    }
 
-            return _requestDelegate;
-        }
+        //    return _requestDelegate;
+        //}
     }
 }

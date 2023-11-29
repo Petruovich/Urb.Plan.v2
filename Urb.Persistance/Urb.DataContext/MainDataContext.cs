@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Urb.Persistance.Urb.DataConext
        : base(contextOptions)
         {
         }
-        public DbSet<Token> Tokens { get; set; }
+        //public DbSet<Token> Tokens { get; set; }
         public DbSet<User> Users { get; set; }
 
     }

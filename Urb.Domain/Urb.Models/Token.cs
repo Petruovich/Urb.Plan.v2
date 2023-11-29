@@ -13,7 +13,7 @@ namespace Urb.Domain.Urb.Models
         [Key]
         public string TokenId { get; set; }
         public User User { get; set; }   
-        public int? UserId { get; set; } /*= 0;*/
+        //public int? UserId { get; set; } /*= 0;*/
         public string Access_Token { get; set; }   
     }
 }

@@ -1,18 +1,21 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Urb.Domain.Urb.Models;
 
 namespace Urb.Persistance.Urb.Repositories
 {
-    internal class UserRepository
+    public class UserRepository
     {
 
         DbContext _dbContext;
-        public void Create(User user)
+        public void Create(IdentityUser user)
         {
-            _dbContext.Set<User>().Add(user);
+            _dbContext.Set<IdentityUser>().Add(user);
         }
         public User GetById(string id)
         {

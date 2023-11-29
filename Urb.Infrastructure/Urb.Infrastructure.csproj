@@ -25,8 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\API\Urb.Application.csproj" />
     <ProjectReference Include="..\Urb.Domain\Urb.Domain.csproj" />
-    <ProjectReference Include="..\Urb.Plan.v2\Urb.Plan.v2.csproj" />
+    <ProjectReference Include="..\Urb.Persistance\Urb.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,6 @@ namespace Urb.Domain.Urb.Models
 {
     public class User: IdentityUser
     {        
-        public ICollection<Token> Tokens { get; set; }
+        //public ICollection<Token> Tokens { get; set; }
     }
 }

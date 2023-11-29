@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -7,27 +8,30 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Urb.Plan.v2;
+using Urb.Application.App.Settings;
+using Urb.Application.ComponentModels;
+using Urb.Application.IComponentModels;
+using Urb.Application.Urb.IServices;
 
 namespace Urb.Infrastructure.Urb.Services
 {
-    public class JwtService
+    public class JwtService: IJwtService
     {
         private readonly AppSettings _appSettings;
 
-        public JWTService(AppSettings appSettings)
+        public JwtService(IOptions<AppSettings> appSettings)
         {
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
 
-        public string GenerateToken(IdentityUser user)
+        public string GenerateToken(IUserAuthenticateModel model/*IdentityUser user*/)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_appSettings.JWTKey);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim(/*"id"*/"Email", model.Email.ToString())/*user.Id.ToString())*/ }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
