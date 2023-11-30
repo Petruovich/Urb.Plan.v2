@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: action/checkout@v6
+      - uses: action/checkout@v1
 
       - name: Setup .NET
-        uses: action/setup-dotnet@v6
+        uses: action/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
 
