@@ -1,4 +1,4 @@
-name: Azure_push_v1
+name: Azure_push_v3
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup .NET
         uses: action/setup-dotnet@v3
         with:
-          dotnet-version: '6.x'
+          dotnet-version: '6.0'
 
       - name: Restore
         run: dotnet restore ./Urb.Plan.v2.sln
