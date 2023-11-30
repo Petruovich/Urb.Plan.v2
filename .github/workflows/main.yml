@@ -4,28 +4,28 @@ on:
   workflow_dispatch:
   push:
       branches: 
-      - rebuilt_v2
+      - master
 
 jobs:
   main:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: action/checkout@v3
+      - uses: action/checkout@v6
 
       - name: Setup .NET
-        uses: action/setup-dotnet@v3
+        uses: action/setup-dotnet@v6
         with:
           dotnet-version: '6.0.x'
 
       - name: Restore
-        run: dotnet restore ./Urb.Plan.v2.sln
+        run: dotnet restore Urb.Plan.v2.sln
 
       - name: Build
-        run: dotnet build ./Urb.Plan.v2.sln --configuration Release --no-restore  
+        run: dotnet build Urb.Plan.v2.sln --configuration Release --no-restore  
 
       - name: Publish
-        run: dotnet publish ./Urb.Plan.v2.sln --configuration Release --no-build
+        run: dotnet publish Urb.Plan.v2.sln --configuration Release --no-build
         
       
         
