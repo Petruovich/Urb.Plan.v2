@@ -1,10 +1,10 @@
-name: Azure_push_v3
+name: Azure_push_v1
 
 on:
   workflow_dispatch:
   push:
       branches: 
-      - master
+      - rebuilt_v2
 
 jobs:
   main:
@@ -12,11 +12,11 @@ jobs:
 
     steps:
       - uses: action/checkout@v3
-      
+
       - name: Setup .NET
         uses: action/setup-dotnet@v3
         with:
-          dotnet-version: '6.0'
+          dotnet-version: '6.0.x'
 
       - name: Restore
         run: dotnet restore ./Urb.Plan.v2.sln
