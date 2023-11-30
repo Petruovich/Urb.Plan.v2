@@ -6,6 +6,22 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+
+	<ItemGroup>
+		<None Update="E:\Users\bogac\Desktop\Urb.Plan.v2\Urb.Persistance\Migrations\">
+			<Generator>MSBuild:UpdateGeneratedFiles</Generator>
+			<LastGenOutput>E:\Users\bogac\Desktop\Urb.Plan.v2\Urb.Persistance\Migrations\</LastGenOutput>
+		</None>
+	</ItemGroup>
+	
+	
+	
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+	
+	
+	
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
@@ -23,11 +39,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
-
+	
+	
+	
   <ItemGroup>
     <ProjectReference Include="..\API\Urb.Application.csproj" />
     <ProjectReference Include="..\Urb.Domain\Urb.Domain.csproj" />
-    <ProjectReference Include="..\Urb.Persistance\Urb.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

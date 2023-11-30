@@ -1,20 +1,25 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Urb.Plan.v2.IServices;
+using Urb.Application.App.Settings;
+using Urb.Application.ComponentModels;
+using Urb.Application.IComponentModels;
+using Urb.Application.Urb.IServices;
 using Urb.Plan.v2.Views;
 
 namespace Urb.Plan.v2.Controllers
 {
-    [Authorize]
+    [Route("api/[controller]")]
+    [AllowAnonymous]
     [ApiController]
-    [Route("[controller]")]
-    public class UserController: ControllerBase
+    public class UserController : ControllerBase
     {
+        
         private IUserService _userService;
         private IMapper _mapper;
-        private readonly AppSettings _appSettings;       
+        private AppSettings _appSettings;
         public UserController(
             IUserService userService,
             IMapper mapper,
@@ -25,30 +30,36 @@ namespace Urb.Plan.v2.Controllers
             _appSettings = appSettings.Value;
         }
 
-
         [Route("Register")]
         [AllowAnonymous]
-        [HttpPost("register")]
-        public IActionResult Register(UserRegisterModel userRegisterModel)
+        [HttpPost/*("register")*/]
+        public Task<object> Register(UserRegisterModel userRegisterModel)
         {
-            _userService.Register(userRegisterModel);
-            return Ok(new { message = "Registration successful" });
+            //_userService.Register(userRegisterModel);
+            return  _userService.Register(userRegisterModel);/*Ok(new { message = "Registration successful" });*/
         }
 
-        [Route("GetAll")]
-        [HttpGet]
-        public IActionResult GetAll()
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<object> Authenticate(UserAuthenticateModel model)
         {
-            var users = _userService.GetAll();
-            return Ok(users);
+            var response = await _userService.AuthenticateUser(model);
+            return response;
         }
+        //[Route("GetAll")]
+        //[HttpGet]
+        //public IActionResult GetAll()
+        //{
+        //    var users = _userService.GetAll();
+        //    return Ok(users);
+        //}
 
-        [Route("GetUser")]
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            var user = _userService.GetUser(id);
-            return Ok(user);
-        }
+        //[Route("GetUser")]
+        //[HttpGet/*("{id}")*/]
+        //public IActionResult GetById(int id)
+        //{
+        //    var user = _userService.GetUser(id);
+        //    return Ok(user);
+        //}
     }
 }
