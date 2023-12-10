@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Urb.Persistance.Urb.DataConext;
 
@@ -11,9 +12,11 @@ using Urb.Persistance.Urb.DataConext;
 namespace Urb.Persistance.Migrations
 {
     [DbContext(typeof(UserTokenDataContext))]
-    partial class UserTokenDataContextModelSnapshot : ModelSnapshot
+    [Migration("20231209214553_bord")]
+    partial class bord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,10 +247,6 @@ namespace Urb.Persistance.Migrations
 
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
-
-                    b.Property<byte[]>("Photo")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
