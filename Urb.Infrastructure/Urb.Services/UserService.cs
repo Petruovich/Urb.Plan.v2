@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Messaging;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,8 @@ namespace Urb.Infrastructure.Urb.Services
 {
     public class UserService: IUserService
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private SignInManager<User> _signInManager;
         private UserTokenDataContext _context;
         private IJwtService _jwtService;
         private readonly IMapper _mapper;
@@ -26,8 +27,8 @@ namespace Urb.Infrastructure.Urb.Services
             UserTokenDataContext context,
             IJwtService jWTService,
             IMapper autoMapperProfile,
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager
+            SignInManager<User> signInManager,
+            UserManager<User> userManager
             )
         {
             _context = context;
@@ -40,7 +41,7 @@ namespace Urb.Infrastructure.Urb.Services
         {
             throw new NotImplementedException();
         }
-        public async Task<IdentityUser>  GetUser(string email)
+        public async Task<User>  GetUser(string email)
         {
             var identityuser = await _userManager.FindByEmailAsync(email);                     
             return identityuser;
@@ -67,22 +68,23 @@ namespace Urb.Infrastructure.Urb.Services
             var errorDetail = string.Join(", ", errors.Select(e => e.Description));
             return new { Error = errorDetail };           
         }
-        public async Task<object> AuthenticateUser(IUserAuthenticateModel authenticateUser)
+        public async Task<IActionResult> AuthenticateUser(IUserAuthenticateModel authenticateUser)
         {
             var user = _mapper.Map<User>(authenticateUser);
             var joinUser = await _userManager.FindByEmailAsync(user.Email); 
             if (joinUser == null)
             {
-                return new { Messege = "User not found" };
+                return new BadRequestObjectResult(new {Message = "not found" });
             }          
                 var userauth = await _signInManager.CheckPasswordSignInAsync(joinUser, authenticateUser.Password,
                                                                                lockoutOnFailure: false); 
             if (userauth.Succeeded)
             {
                 var token = _jwtService.GenerateToken(authenticateUser);
-                return token;               
+                return new OkObjectResult(token);
+                //return token;               
             }
-            return new { Messege = "Auth Failed" };
+            return new BadRequestObjectResult( new { Messege = "Auth Failed" });
         }
     }
 }

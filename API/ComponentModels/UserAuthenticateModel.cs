@@ -10,6 +10,8 @@ namespace Urb.Application.ComponentModels
 {
     public class UserAuthenticateModel: IUserAuthenticateModel
     {
+        public string Name { get; set; }
+        public string UserId { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]

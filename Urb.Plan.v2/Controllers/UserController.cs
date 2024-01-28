@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Urb.Application.App.Settings;
@@ -30,21 +31,89 @@ namespace Urb.Plan.v2.Controllers
             _appSettings = appSettings.Value;
         }
 
+
         [Route("Register")]
         [AllowAnonymous]
         [HttpPost/*("register")*/]
-        public Task<object> Register(UserRegisterModel userRegisterModel)
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<object> Register(UserRegisterModel userRegisterModel)
         {
             //_userService.Register(userRegisterModel);
-            return  _userService.Register(userRegisterModel);/*Ok(new { message = "Registration successful" });*/
+            var result = await _userService.Register(userRegisterModel);/*Ok(new { message = "Registration successful" });*/
+            if (result is IdentityResult identityResult)
+            {
+                if (identityResult.Succeeded)
+                {
+                    return Ok("User registered successfully.");
+                }
+                else
+                {
+                    var errors = identityResult.Errors.Select(e => e.Description);
+                    return BadRequest(new { Errors = errors });
+                }
+            }
+
+            if (result?.GetType().GetProperty("Error")?.GetValue(result) is string errorDetail)
+            {
+                return BadRequest(new { Error = errorDetail });
+            }
+
+            if (result?.GetType().GetProperty("Message")?.GetValue(result) is string message)
+            {
+                return BadRequest(new { Message = message });
+            }
+
+            return BadRequest("Unknown error occurred.");
+
+
+
+            //if (result is IdentityResult identityResult && identityResult.Succeeded)
+            //{
+            //    return Ok("User registered successfully."); 
+            //}                        
+            //    return BadRequest(_userService.Register(userRegisterModel));
+            //    
+
+
+            //if (result is IdentityResult identityResult)
+            //{
+            //    if (identityResult.Succeeded)
+            //    {
+            //        return Ok("User registered successfully.");
+            //    }
+            //    else
+            //    {
+            //        var errors = identityResult.Errors.Select(e => e.Description);
+            //        return BadRequest(new { Errors = errors });
+            //    }
+            //}
+
+            //if (result is { Error: var errorDetail })
+            //{
+            //    return BadRequest(new { Error = errorDetail });
+            //}
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<object> Authenticate(UserAuthenticateModel model)
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Authenticate(UserAuthenticateModel model)
         {
             var response = await _userService.AuthenticateUser(model);
-            return response;
+
+            if (response is BadRequestObjectResult badRequestResult)
+            {
+                return BadRequest(badRequestResult.Value);
+            }
+
+            if (response is OkObjectResult okResult)
+            {
+                return Ok(okResult.Value);
+            }
+
+            return BadRequest("An unknown error occurred.");
         }
         //[Route("GetAll")]
         //[HttpGet]

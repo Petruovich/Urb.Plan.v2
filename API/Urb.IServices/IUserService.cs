@@ -14,9 +14,9 @@ namespace Urb.Application.Urb.IServices
     public interface IUserService
     {
         public Task<object> Register(IUserRegisterModel userRegisterModel);
-        public Task<object> AuthenticateUser(IUserAuthenticateModel authenticateUser);
+        public Task<IActionResult> AuthenticateUser(IUserAuthenticateModel authenticateUser);
         //public IActionResult AuthenticateUser();
-        public  Task<IdentityUser> GetUser(string email);
+        public  Task<User> GetUser(string email);
         //public IEnumerable<User> GetAll();
     }
 }

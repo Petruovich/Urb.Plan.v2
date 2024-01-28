@@ -9,6 +9,8 @@ namespace Urb.Application.IComponentModels
 {
     public interface IUserAuthenticateModel
     {
+        public string Name { get; set; }
+        public string UserId { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]
