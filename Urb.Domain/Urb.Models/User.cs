@@ -11,6 +11,6 @@ namespace Urb.Domain.Urb.Models
 {
     public class User: IdentityUser
     {                
-        //public List<RentedBoard>? RentedBoards { get; set; }
+        ///public List<RentedBoard>? RentedBoards { get; set; }
     }
 }
