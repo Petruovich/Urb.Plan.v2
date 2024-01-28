@@ -12,15 +12,18 @@ using Urb.Application.App.Settings;
 using Urb.Application.ComponentModels;
 using Urb.Application.IComponentModels;
 using Urb.Application.Urb.IServices;
+using Urb.Domain.Urb.Models;
 
 namespace Urb.Infrastructure.Urb.Services
 {
     public class JwtService: IJwtService
     {
         private readonly AppSettings _appSettings;
+        private readonly User _user;
 
-        public JwtService(IOptions<AppSettings> appSettings)
+        public JwtService(IOptions<AppSettings> appSettings, User user)
         {
+            _user = user;
             _appSettings = appSettings.Value;
         }
 
@@ -31,7 +34,11 @@ namespace Urb.Infrastructure.Urb.Services
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(/*"id"*/"Email", model.Email.ToString())/*user.Id.ToString())*/ }),
+                Subject = new ClaimsIdentity(new[]
+                { 
+                    //new Claim(/*"id"*/"Email", model.Email.ToString()),
+                new Claim(/*"id", model.UserId.ToString()*/"Email", model.Email)
+                }),                              
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };

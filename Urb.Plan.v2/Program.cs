@@ -14,6 +14,7 @@ using Urb.Application.App.Settings;
 using Urb.Application.ComponentModels;
 using Urb.Application.IComponentModels;
 using Microsoft.AspNetCore.Authentication;
+using Urb.Domain.Urb.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,7 @@ ConfigurationManager configuration = builder.Configuration;
 
 builder.Services.AddDbContext<UserTokenDataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddDbContext<MainDataContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
-builder.Services.AddIdentityCore<IdentityUser/*, IdentityRole*/>(options =>
+builder.Services.AddIdentityCore<User/*IdentityUser*//*, IdentityRole*/>(options =>
     {
         options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.";
         options.Password.RequireUppercase = true;
@@ -33,8 +34,11 @@ builder.Services.AddIdentityCore<IdentityUser/*, IdentityRole*/>(options =>
     
     //.AddEntityFrameworkStores<MainDataContext>()
     .AddEntityFrameworkStores<UserTokenDataContext>()
-    .AddSignInManager<SignInManager<IdentityUser>>()
+    .AddSignInManager<SignInManager<User/*IdentityUser*/>>()
     .AddDefaultTokenProviders();
+//builder.Services.AddControllers().
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
 //builder.Services.AddSignInManager<IdentityUser, SignInManager<IdentityUser>>();
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
@@ -45,6 +49,18 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Pinus",
+                      builder =>
+                      {
+                          builder.WithOrigins("https://red-pebble-049af5603.4.azurestaticapps.net/",
+                              "http://localhost:5173/")
+                                 .AllowAnyHeader()
+                                 .AllowAnyMethod();
+                      });
+});
+
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -77,6 +93,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IUserRegisterModel, UserRegisterModel>();
 builder.Services.AddSingleton<ISystemClock, SystemClock>();
+builder.Services.AddScoped<IBordService, BordService>();
+builder.Services.AddScoped<User>();
 //builder.Services.AddScoped<SignInManager<IdentityUser>>();
 //builder.Services.AddScoped<UserService, IUserRegisterModel>();
 
@@ -84,13 +102,13 @@ builder.Services.AddSingleton<ISystemClock, SystemClock>();
 
 var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
-    if (!app.Environment.IsDevelopment())
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
     {
         app.UseExceptionHandler("/Error");
     }
 app.UseSwagger();
-
+app.UseCors("Pinus");
 // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
 // specifying the Swagger JSON endpoint.
 app.UseSwaggerUI(c =>

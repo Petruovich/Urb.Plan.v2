@@ -23,6 +23,8 @@ namespace Urb.Plan.v2.Mapper
                 .ConstructUsing(sours => new UserAuthenticateModel { });
 
             CreateMap<IUserAuthenticateModel, User>()
+                .ForMember(aut => aut.UserName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(aut => aut.Id, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(aut => aut.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(aut => aut.PasswordHash, opt => opt.MapFrom(src => src.Password))
                 .ConstructUsing(sours => new User { });

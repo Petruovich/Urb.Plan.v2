@@ -86,6 +86,10 @@ namespace Urb.Persistance.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -137,6 +141,10 @@ namespace Urb.Persistance.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -220,7 +228,7 @@ namespace Urb.Persistance.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Urb.Domain.Urb.Models.RentedBords", b =>
+            modelBuilder.Entity("Urb.Domain.Urb.Models.Billboard", b =>
                 {
                     b.Property<int>("BillboardId")
                         .ValueGeneratedOnAdd()
@@ -228,16 +236,14 @@ namespace Urb.Persistance.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillboardId"));
 
-                    b.Property<string>("BordName")
-                        .IsRequired()
+                    b.Property<string>("Adress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DordDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DayCost")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
@@ -245,16 +251,49 @@ namespace Urb.Persistance.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
 
-                    b.Property<byte[]>("Photo")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                    b.Property<DateTime?>("RentalEndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("RentalStartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("BillboardId");
 
+                    b.ToTable("Billboards");
+                });
+
+            modelBuilder.Entity("Urb.Domain.Urb.Models.RentedBoard", b =>
+                {
+                    b.Property<int>("RentedBoardId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RentedBoardId"));
+
+                    b.Property<int>("BillboardId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("FullCost")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RentedBoardId");
+
+                    b.HasIndex("BillboardId");
+
                     b.ToTable("RentedBords");
+                });
+
+            modelBuilder.Entity("Urb.Domain.Urb.Models.User", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -306,6 +345,22 @@ namespace Urb.Persistance.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Urb.Domain.Urb.Models.RentedBoard", b =>
+                {
+                    b.HasOne("Urb.Domain.Urb.Models.Billboard", "Billboard")
+                        .WithMany("RentedBoards")
+                        .HasForeignKey("BillboardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Billboard");
+                });
+
+            modelBuilder.Entity("Urb.Domain.Urb.Models.Billboard", b =>
+                {
+                    b.Navigation("RentedBoards");
                 });
 #pragma warning restore 612, 618
         }
